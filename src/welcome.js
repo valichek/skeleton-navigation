@@ -1,6 +1,10 @@
 import {computedFrom} from 'aurelia-framework';
+import {Validation} from 'aurelia-validation';
 
-export class Welcome{
+export class Welcome {
+  
+  static inject() {return [Validation]}
+  
   heading = 'Welcome to the Aurelia Navigation App!';
   firstName = 'John';
   lastName = 'Doe';
@@ -17,6 +21,15 @@ export class Welcome{
   submit(){
     this.previousValue = this.fullName;
     alert(`Welcome, ${this.fullName}!`);
+  }
+  
+  constructor(validation) {
+    this.validation = validation.on(this)
+        .ensure('firstName') 
+              .isNotEmpty()
+              .hasMinLength(5)
+        .ensure('lastName') 
+              .isNotEmpty();
   }
 
   canDeactivate() {
